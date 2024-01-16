@@ -20,7 +20,18 @@ const NewIssue = () => {
   const { register, control, handleSubmit,formState:{errors} } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema), //Integrate react form with zod
   });
-
+const onSubmit=
+handleSubmit(async (data) => {
+  try {
+    //Try,catch to handle error of axios
+    setSubmitting(true)
+    await axios.post("/api/issues", data);
+    router.push("/");
+  } catch (error) {
+    setSubmitting(false)
+    setError("unExpected Error occurred"); //set error in state
+  }
+})
   return (
     <div className="max-w-xl ">
       {error && (
@@ -32,17 +43,7 @@ const NewIssue = () => {
       )}
       <form
         className=" space-y-3"
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            //Try,catch to handle error of axios
-            setSubmitting(true)
-            await axios.post("/api/issues", data);
-            router.push("/");
-          } catch (error) {
-            setSubmitting(false)
-            setError("unExpected Error occurred"); //set error in state
-          }
-        })}
+        onSubmit={onSubmit}
       >
         <TextField.Root>
           {/* Form Must be use client*/}
