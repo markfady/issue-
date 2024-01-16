@@ -11,22 +11,25 @@ interface IssueForm{
   description:string;
 }
 const NewIssue = () => {
-  const router=useRouter();
+  const router = useRouter();
   const {register,control,handleSubmit}=useForm<IssueForm>()
   return (
     <form  className='max-w-xl space-y-3'
-    onSubmit={handleSubmit(async(data)=>{
-      await axios.post('/api/issues',data);
-      router.push('/issues');
-    })}>
+    onSubmit={handleSubmit(async(data)=>
+    {
+     await axios.post('/api/issues',data);
+     router.push('/issues')
+    }
+   )}>
     <TextField.Root>  {/* Form Must be use client  */}
     <TextField.Input placeholder="Title" {...register('title')}/>
   </TextField.Root>
+  {/*Markdown editor replaces TextArea of radixUI */}
   <Controller
   name='description'
   control={control}
-  render={(field)=>   <SimpleMDE placeholder="Description" {...field}/> } 
-  /> {/*Markdown editor replaces TextArea of radixUI */}
+  render={({field})=><SimpleMDE placeholder='Description' {...field}/> } 
+  /> 
   <Button>Submit New Issue</Button>
     </form>
 
