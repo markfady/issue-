@@ -12,6 +12,8 @@ const EditIssuePage = async({params}:Props) => {
     })
     if(!Issue) notFound()
   return (
+    //We check with this issue Props in the IssueForm Page , if it's found send patch request to server (cause this mean the id of issue is found to be edited) 
+    //if not send new Issue Button and post to server in (New Issue page)
    <IssueForm issue={Issue}/>
   )
 }
