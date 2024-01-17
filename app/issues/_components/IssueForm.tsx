@@ -31,7 +31,12 @@ handleSubmit(async (data) => {
   try {
     //Try,catch to handle error of axios
     setSubmitting(true)
-    await axios.post("/api/issues", data);
+    if(issue)
+    await axios.patch("/api/issues/"+issue.id,data)
+    else{
+      await axios.post("/api/issues", data);
+    
+    }
     router.push("/");
   } catch (error) {
     setSubmitting(false)
@@ -67,7 +72,9 @@ handleSubmit(async (data) => {
           )}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button disabled={isSubmitting}>Submit New Issue {isSubmitting&&<Spinner/>}</Button>
+      {/* This is called in Edit Issue and Create New Issue so if there already an Issue update it and send patch , if there are no Issue so submit new form and post it to the server */}
+        <Button disabled={isSubmitting}>{issue? 'Update Issue' : 'Submit New Issue' } {isSubmitting&&<Spinner/>}</Button>
+        
       </form>
     </div>
   );
