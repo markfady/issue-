@@ -4,15 +4,14 @@ import Link from "next/link";
 import prisma from "@/prisma/client";
 import IssueStatusBadge from "../components/IssueStatusBadge";
 import { isSyntheticExpression } from "typescript";
+import delay from "delay";
+import IssuesAction from "./IssuesAction";
 const IssuesPage = async () => {
   const issues = await prisma.issue.findMany();
+  await delay(2000)
   return (
     <div>
-      <div>
-        <Button>
-          <Link href="issues/new">New Issue</Link>
-        </Button>
-      </div>
+     <IssuesAction/>
 
       <Table.Root variant="surface" className="mt-5 ">
         <Table.Header>
