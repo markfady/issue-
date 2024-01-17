@@ -1,7 +1,7 @@
 "use client";
-import { Button, Callout, Text, TextArea, TextField } from "@radix-ui/themes";
+import { Button, Callout,TextField } from "@radix-ui/themes";
+import dynamic from "next/dynamic"; //use dynamic with Simplemde cause all pages run on server side , and markdown is client so you need to lazy loading it line 16
 import React, { useState } from "react";
-import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
@@ -11,9 +11,12 @@ import { createIssueSchema } from "@/app/validationSchemas";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
-import delay from "delay";
-type IssueForm = z.infer<typeof createIssueSchema>; //to prevent redundancy
 
+type IssueForm = z.infer<typeof createIssueSchema>; //to prevent redundancy
+const SimpleMDE=dynamic(
+  ()=>import('react-simplemde-editor'),
+  {ssr:false} //don't run this on server 
+)
 const NewIssue = () => {
 
   const router = useRouter();
