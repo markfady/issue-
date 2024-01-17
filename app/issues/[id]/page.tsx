@@ -17,7 +17,6 @@ const IssueDetailPage = async ({params}:Props) => {
     notFound()
     await delay(2000)
   return (
-<>
     <Grid columns={{initial:'1',md:'2'}} gap='5'>
     <Box>
     <IssueDetail issue={Issue}/>
@@ -26,7 +25,6 @@ const IssueDetailPage = async ({params}:Props) => {
     <EditButton id={Issue.id} />
     </Box>
     </Grid>
-</>
   )
 }
 
