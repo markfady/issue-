@@ -12,12 +12,12 @@ import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { Issue } from "@prisma/client";
-
+import SimpleMDE from 'react-simplemde-editor'
 type IssueFormData = z.infer<typeof createIssueSchema>; //to prevent redundancy
-const SimpleMDE=dynamic(
-  ()=>import('react-simplemde-editor'),
-  {ssr:false} //don't run this on server 
-)
+// const SimpleMDE=dynamic(
+//   ()=>import('react-simplemde-editor'),
+//   {ssr:false} //don't run this on server 
+// )
 const IssueForm = ({issue}:{issue?:Issue}) => {
 
   const router = useRouter();
