@@ -5,11 +5,12 @@ import React from 'react'
 import {AiFillBug} from 'react-icons/ai'
 import classNames from 'classnames'
 import { useSession } from 'next-auth/react'
-import { Box, Container, Flex } from '@radix-ui/themes'
+import { Avatar, Box, Container, DropdownMenu, Flex, Text } from '@radix-ui/themes'
 
 const NavBar = () => {
   const currentPath=usePathname(); //When use Hook make use client at the top 
  const{status,data:session}= useSession() //Make AuthProvider component to use this Hook
+ console.log(session?.user?.email)
   const links=[ //To avoid re write the Li and Links 
     {label:'Dashboard',href:'/'},
     {label:'Issues',href:'/issues/list'}
@@ -32,7 +33,25 @@ const NavBar = () => {
         </ul>
         </Flex>
         <Box>
-          {status==="authenticated"&&(<Link href='/api/auth/signout'>Logout</Link>)}
+    
+          {status==="authenticated"&&
+          (
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger>
+                <Avatar src={session?.user?.image!} fallback="?" size='2' radius='full' className='cursor-pointer'/>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Content>
+                <DropdownMenu.Label>
+                  <Text size="2">
+                  {session?.user?.email}
+                  </Text>
+                </DropdownMenu.Label>
+                <DropdownMenu.Label>
+              <Link href='/api/auth/signout'>Logout</Link>
+                </DropdownMenu.Label>
+              </DropdownMenu.Content>
+            </DropdownMenu.Root>
+          )}
           {status==="unauthenticated"&&(<Link href='/api/auth/signin'>Login</Link>)}
         </Box>
       </Flex>
