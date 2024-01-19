@@ -29,3 +29,16 @@ export async function PATCH(
   //Send the updated data to the server
   return NextResponse.json(updatedIssue);
 }
+
+export async function DELETE(request:NextRequest,{params}:{params:{id:string}}) {
+  const issue = await prisma.issue.findUnique({ //Check if id found in DB
+    where:{id:parseInt(params.id)}
+  })
+  if(!issue)
+  return NextResponse.json({error:'Invalid Issue'},{status:404})
+
+  await prisma.issue.delete({ //If id found in DB go delete it 
+    where:{id:issue.id}
+  })
+  return NextResponse.json({});
+}
