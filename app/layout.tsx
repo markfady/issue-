@@ -5,7 +5,7 @@ import NavBar from './NavBar'
 import './globals.css'
 import './theme-config.css'
 
-import { Theme } from '@radix-ui/themes'
+import { Container, Theme } from '@radix-ui/themes'
 import AuthProvider from './auth/Provider'
 
 
@@ -28,10 +28,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.variable}>
         <AuthProvider> {/* To use useSession hook */}
+      
       <Theme appearance="light" accentColor="violet">
         <NavBar/>
+        
         <main className='p-2'>
+          <Container>
+
+  
           {children}
+          </Container>
           </main>
         </Theme>
         </AuthProvider>
