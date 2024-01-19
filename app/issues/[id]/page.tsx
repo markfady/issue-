@@ -1,5 +1,5 @@
 import prisma from '@/prisma/client'
-import { Box,Flex,Grid } from '@radix-ui/themes'
+import { Box,Container,Flex,Grid } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import delay from 'delay'
@@ -18,6 +18,8 @@ const IssueDetailPage = async ({params}:Props) => {
     notFound()
     await delay(2000)
   return (
+    <Container>
+
     <Grid columns={{initial:'1',sm:'5'}} gap='5'>
     <Box className='md:col-span-4'>
     <IssueDetail issue={Issue}/>
@@ -29,6 +31,7 @@ const IssueDetailPage = async ({params}:Props) => {
     </Flex>
     </Box>
     </Grid>
+    </Container>
   )
 }
 
