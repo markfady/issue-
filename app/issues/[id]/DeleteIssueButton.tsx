@@ -1,24 +1,36 @@
 'use client'
+import Spinner from '@/app/components/Spinner'
 import { AlertDialog, Button, Flex } from '@radix-ui/themes'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import { useState } from 'react'
 
 const DeleteIssueButton = ({issueId}:{issueId:number}) => {
-
+  const[error,setError]=useState(false);
+  const [isDeleting,setDeleting]=useState(false)
   const navigate=useRouter();
-  
+
   const deleteIssue = async (id: number) => {
-    await axios.delete('/api/issues/' + id);
-    navigate.push('/issues')
-    navigate.refresh()
+    try {
+      setDeleting(true)
+      await axios.delete('/api/issues/' + id);
+      navigate.push('/issues')
+      navigate.refresh()
+      
+    } catch (error) {
+      setError(true)
+    }
   };
 
   
   return (
+    <>
     <AlertDialog.Root>
       <AlertDialog.Trigger>
-        <Button color='red' >Delete Issue</Button>
+        <Button color='red' disabled={isDeleting}>
+          Delete Issue
+          {isDeleting&& <Spinner/>}
+          </Button>
       </AlertDialog.Trigger>
       <AlertDialog.Content>
         <AlertDialog.Title>
@@ -41,6 +53,20 @@ const DeleteIssueButton = ({issueId}:{issueId:number}) => {
 </Flex>
       </AlertDialog.Content>
     </AlertDialog.Root>
+    <AlertDialog.Root open={error}>
+        <AlertDialog.Content>
+          <AlertDialog.Title>
+            Error
+          </AlertDialog.Title>
+          <AlertDialog.Description>
+          This issue cannot be deleted right now
+          </AlertDialog.Description>
+          <Button variant="soft" color="gray" onClick={()=>setError(false)}>
+       Ok
+        </Button>
+        </AlertDialog.Content>
+    </AlertDialog.Root>
+    </>
   )
   }
 
