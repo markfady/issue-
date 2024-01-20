@@ -6,7 +6,8 @@ import {AiFillBug} from 'react-icons/ai'
 import classNames from 'classnames'
 import { useSession } from 'next-auth/react'
 import { Avatar, Box, Container, DropdownMenu, Flex, Text } from '@radix-ui/themes'
-
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 const NavBar = () => {
 
 
@@ -47,7 +48,7 @@ return (
 }
 const AuthStatus=()=>{
   const{status,data:session}= useSession() //Make AuthProvider component to use this Hook
-    if(status==='loading') return null
+    if(status==='loading') return <Skeleton width='3rem'/> //Must give skeleton width of the space to work
     if(status==='unauthenticated')  return  <Link href='/api/auth/signin' className='nav-link'>Login</Link>
   return(
     <Box>
