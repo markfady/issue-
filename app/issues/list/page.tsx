@@ -5,8 +5,20 @@ import IssueStatusBadge from "@/app/components/IssueStatusBadge";
 import delay from "delay";
 import IssuesAction from "./IssuesAction";
 import Link from "@/app/components/Link";
-const IssuesPage = async () => {
-  const issues = await prisma.issue.findMany();
+import { Status } from "@prisma/client";
+interface Props{
+  searchParams:{status:Status}
+}
+const IssuesPage = async ({searchParams}:Props) => {
+  const statuses=Object.values(Status) // method is used to get an array of the enum values.
+  const status=statuses.includes(searchParams.status)? searchParams.status:undefined; //checks if the searchParams.status is a valid status by using the includes method on the statuses array
+
+  const issues = await prisma.issue.findMany({ //uses Prisma to query the database and fetch a list of issues based on the specified status
+    where:{
+      status
+    }
+  });
+ 
   await delay(2000)
   return (
     <div>
