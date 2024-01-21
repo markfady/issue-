@@ -5,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
-
+import toast,{Toaster} from 'react-hot-toast'
 
 const AssigneeSelect = ({issue}:{issue:Issue}) => { //we make api route cause we cannot access prisma in 'use client' 
  const{data:users,error,isLoading} =useQuery<User[]>({ //key to make it unique , Function it's allow us to use any type of fetching but react query doesn't fetch 
@@ -18,10 +18,16 @@ const AssigneeSelect = ({issue}:{issue:Issue}) => { //we make api route cause we
     if(isLoading) return <Skeleton/>; //Skeleton for Assign to 
    if(error) return null; //Handle error of fetching data better than useEffect
   return (
+  <>
     <Select.Root
     defaultValue={issue.assignedToUserId || "unassigned"}
-     onValueChange={(userId)=>{
-      axios.patch(`/api/issues/`+issue.id,{assignedToUserId: userId === "unassigned" ? null : userId}) //if you selected unassigned make null inDB , if you selected user takes id and sent it to the patch database of the issue
+     onValueChange={async(userId)=>{
+      try {
+       await axios.patch(`/api/issues/`+issue.id,{assignedToUserId: userId === "unassigned" ? null : userId}) //if you selected unassigned make null inDB , if you selected user takes id and sent it to the patch database of the issue
+        
+      } catch (error) {
+          toast.error('Changes could not be saved')
+      }
     }}>
   <Select.Trigger placeholder="Assign..." />
   <Select.Content>
@@ -34,6 +40,8 @@ const AssigneeSelect = ({issue}:{issue:Issue}) => { //we make api route cause we
     </Select.Group>
   </Select.Content>
 </Select.Root>
+<Toaster/>  
+</>
   )
 }
 
