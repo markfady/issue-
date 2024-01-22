@@ -2,7 +2,6 @@ import React from "react";
 import { Table } from "@radix-ui/themes";
 import prisma from "@/prisma/client";
 import IssueStatusBadge from "@/app/components/IssueStatusBadge";
-import delay from "delay";
 import IssuesAction from "./IssuesAction";
 import Link from "@/app/components/Link";
 import { Issue, Status } from "@prisma/client";
@@ -16,6 +15,8 @@ interface Props {
   }; //Add order to asc and desc
 }
 const IssuesPage = async ({ searchParams }: Props) => {
+  console.log("searchParams"+searchParams)
+  console.log(searchParams)
   const columns: { label: string; value: keyof Issue; className?: string }[] = [
     {
       label: "Issue",
@@ -31,6 +32,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
     },
   ];
   const statuses = Object.values(Status); // method is used to get an array of the enum values.
+
   const status = statuses.includes(searchParams.status)
     ? searchParams.status
     : undefined; //checks if the searchParams.status is a valid status by using the includes method on the statuses array
@@ -43,7 +45,6 @@ const IssuesPage = async ({ searchParams }: Props) => {
     orderBy: { [searchParams.orderBy]: searchParams.order }, // The Prisma query uses the orderBy option to sort the fetched issues
   });
 
-  await delay(2000);
   return (
     <div>
       <IssuesAction />
