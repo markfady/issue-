@@ -52,7 +52,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
         <Table.Header>
           <Table.Row>
             {columns.map((column) => (
-              <Table.ColumnHeaderCell key={column.value}>
+              <Table.ColumnHeaderCell key={column.value} className={column.className}>
                 {/*The sorting logic is implemented using the NextLink components, which generate links to update the query parameters  */}
                 <NextLink
                   href={{
