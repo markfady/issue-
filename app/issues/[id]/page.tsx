@@ -1,7 +1,7 @@
 import prisma from '@/prisma/client'
 import { Box,Container,Flex,Grid } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
-import React from 'react'
+import React, { cache } from 'react'
 import delay from 'delay'
 import IssueDetail from './IssueDetail'
 import EditButton from './EditButton'
@@ -12,12 +12,12 @@ import AssigneeSelect from './AssigneeSelect'
 interface Props{
     params:{id:string}
 }
-
+const fetchUser=cache((issueId:number)=>{ //use this to cache data so the second request will get the cached data (used when you have double or more findUnique statements here and metadata)
+  return prisma.issue.findUnique({where:{id:issueId}}) 
+})
 const IssueDetailPage = async ({params}:Props) => {
   const session = await getServerSession(authOptions)
-    const Issue= await prisma.issue.findUnique({ //Go to check the id of the issue with Prisma (DataBase)
-        where:{id:parseInt(params.id)} 
-    })
+    const Issue= await fetchUser(parseInt(params.id))
     if(!Issue)
     notFound()
     await delay(2000)
@@ -44,7 +44,7 @@ const IssueDetailPage = async ({params}:Props) => {
   )
 }
 export async function generateMetadata({params}:Props) {
-  const issue= await prisma.issue.findUnique({where:{id:parseInt(params.id)}})
+  const issue= await fetchUser(parseInt(params.id))
   return {
     title:issue?.title,
     description:'Details of issue' + issue?.id
