@@ -4,6 +4,7 @@ import { Status } from "@prisma/client";
 import Pagination from "@/app/components/Pagination";
 import { IssueQuery, IssueTable } from "./IssueTable";
 import { Flex } from "@radix-ui/themes";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: IssueQuery 
@@ -43,5 +44,9 @@ const IssueCount=await prisma.issue.count({where: {status}}) //take count of iss
     </Flex>
   );
 };
+export const metadata:Metadata={
+  title:'Issue Tracker-Issue List',
+  description:'View all project issues'
+}
 
 export default IssuesPage;
